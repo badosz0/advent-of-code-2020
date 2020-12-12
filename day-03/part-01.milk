@@ -1,0 +1,18 @@
+#import "basic"
+#import "io"
+#import "string"
+#import "array"
+
+input = io_open("./input.txt", "r")->read("*all")
+entries = string_split(input, "\n")
+
+x = 0
+trees = 0
+
+for y: 1..len(entries) {
+    x += 3
+    x %= len(entries[y])
+    if (entries[y][x] == "#") trees += 1
+}
+
+print(trees)
