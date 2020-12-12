@@ -1,0 +1,73 @@
+#import "basic"
+#import "io"
+#import "string"
+#import "array"
+
+
+input = io_open("./input.txt", "r")->read("*all")
+entries = string_split(input, "\n\n")
+
+fields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+valid = 0
+
+for entry: entries {
+    entry = string_replace(entry, "\n", " ")
+    is_valid = true
+    entry_fields = string_split(entry, " ")
+    entry_data = {}
+    
+    for entry_field: entry_fields {
+        entry_field = string_split(entry_field, ":")
+        entry_data[entry_field[0]] = entry_field[1]
+    } 
+
+    for field: fields {
+        if !entry_data[field] {
+            is_valid = false
+            continue
+        }
+        switch field {
+            case "byr" {
+                year = to_number(entry_data[field])
+                if (year < 1920 || year > 2002) is_valid = false
+            }
+            case "iyr" {
+                year = to_number(entry_data[field])
+                if (year < 2010 || year > 2020) is_valid = false
+            }
+            case "eyr" {
+                year = to_number(entry_data[field])
+                if (year < 2020 || year > 2030) is_valid = false
+            }
+            case "hgt" {
+                if string_ends_with(entry_data[field], "cm") {
+                    height = to_number(string_replace(entry_data[field], "cm", ""))
+                    if (height < 150 || height > 193) is_valid = false
+                } else if string_ends_with(entry_data[field], "in") {
+                    height = to_number(string_replace(entry_data[field], "in", ""))
+                    if (height < 59 || height > 76) is_valid = false
+                } else {
+                    is_valid = false
+                }
+            }
+            case "hcl" {
+                hcl = entry_data[field]
+                if !string_starts_with(hcl, "#") is_valid = false
+                if len(hcl) != 7 is_valid = false
+                allowed = ["#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
+                for 0..len(hcl) if !array_has(allowed, hcl[it]) is_valid = false
+            }
+            case "ecl" {
+                if !array_has(["amb", "blu", "brn", "gry", "grn", "hzl", "oth"], entry_data[field]) is_valid = false
+            }
+            case "pid" {
+                if len(entry_data[field]) != 9 is_valid = false
+            }
+        }
+    }
+
+    if is_valid valid += 1
+}
+
+print(valid)
+

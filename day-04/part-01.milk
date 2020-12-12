@@ -1,0 +1,32 @@
+#import "basic"
+#import "io"
+#import "string"
+#import "array"
+
+
+input = io_open("./input.txt", "r")->read("*all")
+entries = string_split(input, "\n\n")
+
+fields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+valid = 0
+
+for entry: entries {
+    entry = string_replace(entry, "\n", " ")
+    is_valid = true
+    entry_fields = string_split(entry, " ")
+    entry_data = {}
+    
+    for entry_field: entry_fields {
+        entry_field = string_split(entry_field, ":")
+        entry_data[entry_field[0]] = entry_field[1]
+    } 
+
+    for field: fields {
+        if !entry_data[field] is_valid = false
+    }
+
+    if is_valid valid += 1
+}
+
+print(valid)
+
