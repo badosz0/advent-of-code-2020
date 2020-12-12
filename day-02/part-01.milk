@@ -1,0 +1,26 @@
+#import "basic"
+#import "io"
+#import "string"
+
+input = io_open("./input.txt", "r")->read("*all")
+entries = string_split(input, "\n")
+
+valid = 0
+
+for entry: entries {
+    parts    = string_split(entry, " ")
+    range    = string_split(parts[0], "-")
+    min      = to_number(range[0])
+    max      = to_number(range[1])
+    letter   = parts[1][0]
+    password = parts[2]
+    nol = 0
+
+    for i: 0..len(password) {
+        if (password[i] == letter) nol += 1
+    }
+
+    if (nol >= min && nol <= max) valid += 1
+}
+
+print(valid)

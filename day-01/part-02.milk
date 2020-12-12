@@ -1,0 +1,28 @@
+#import "basic"
+#import "io"
+#import "string"
+
+input = io_open("./input.txt", "r")->read("*all")
+entries = string_split(input, "\n")
+
+// 1st Solution
+for a: entries {
+    for b: entries {
+        for c: entries {
+            if a + b + c == 2020 print(a * b * c)
+        }
+    }
+}
+
+
+// 2nd Solution
+for a: 0..len(entries) {
+    for b: a..len(entries) {
+        for c: b..len(entries) {
+            if entries[a] + entries[b] + entries[c] == 2020 {
+                print(entries[a] * entries[b] * entries[c])
+                break
+            }
+        }
+    }
+}
