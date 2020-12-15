@@ -1,0 +1,60 @@
+#import "basic"
+#import "io"
+#import "string"
+#import "array"
+#import "math"
+
+input = io_open("./input.txt", "r")->read("*all")
+entries = string_split(input, "\n")
+ids = []
+
+for entry: entries {
+    low = 0
+    high = 127
+    row = null
+
+    for 0..7 {
+        letter = entry[it]
+        switch letter {
+            case "F" {
+                high = low + floor((high - low) / 2)
+            }
+            case "B" {
+                low += floor((high - low) / 2) + 1
+            }
+        }
+        row = low
+    }
+
+    low = 0
+    high = 7
+    column = null
+    for 7..10 {
+        letter = entry[it]
+        switch letter {
+            case "L" {
+                high = low + floor((high - low) / 2)
+            }
+            case "R" {
+                low += floor((high - low) / 2) + 1
+            }
+        }
+
+        column = low
+    }
+
+    id = row * 8 + column
+    array_add(ids, id)
+}
+
+for id: ids {
+    minid = array_min(ids)
+    maxid = array_max(ids)
+
+    if id == minid || id == maxid continue
+
+    if !array_has(ids, id + 1) {
+        print(id + 1)
+        break
+    }
+}
